@@ -16,8 +16,8 @@ refs.input.addEventListener('input', debounce(onSearchInput,DEBOUNCE_DELAY));
 function onSearchInput(evt) {
     const inputValue = evt.target.value.trim();
     if (!inputValue) {
-        clearCountryInfo();
-        clearCountryList();
+refs.countryList.innerHTML = '';
+refs.countryInfo.innerHTML = '';
         return
     }
     fetchCountries(inputValue).then(onFetchSuccess).catch(onFetchErorr)
@@ -26,12 +26,12 @@ function onFetchSuccess(data) {
     if (data.length >= 2 && data.length <= 10) {
         
         onCreateCountryList(data)
-         clearCountryInfo();
+         refs.countryInfo.innerHTML = '';
 
     } else if (data.length < 2) {
        
         onCreateCountryInfo(data);
-         clearCountryList();
+        refs.countryList.innerHTML = '';
     }
     else
         if (data.length > 10) {
@@ -45,12 +45,12 @@ function onFetchSuccess(data) {
 
 
 function onFetchErorr() {
-    // Notify.failure("Oops, there is no country with that name")
+    Notify.failure("Oops, there is no country with that name")
 }
 function onCreateCountryList(data) {
     const markup = data
         .map(data => {
-            return `<li><img src= '${data.flags.svg} ' width = '50'>
+            return `<li><img src= '${data.flags.svg} ' width="60" height="40">
             <span>${data.name.official}</span>
             </li>`
         })
@@ -59,25 +59,21 @@ function onCreateCountryList(data) {
     console.log(data)
 };
 function onCreateCountryInfo(data) {
-    return data
-        .map((({ flags, name, capital, population, languages }) => {
+    const markup= data
+        .map(data => {
             return `<div class="card-svg" >
-            <img src= '${flags.svg} ' width = '50'>
-            <h1>Country: ${name.official}</h1>
-            <h2>Capital: ${capital}</h2>
-            <span>Population: ${population}</span>
-            <span>languages: ${Object.values(languages)}</span></div>
+            <img src= '${data.flags.png} ' width="320">
+            <h1>Country: ${data.name.official}</h1>
+            <h2>Capital: ${data.capital}</h2>
+            <span>Population: ${data.population}</span>
+            <span>languages: ${Object.values(data.languages)}</span></div>
             `
         })
-            .join(''),
+            .join('');
     refs.countryInfo.innerHTML = markup
     
-)};
+};
 
 
-{/* <img src="" alt="">
 
-<p></p>
-<p></p>
-<p></p> */}
 
